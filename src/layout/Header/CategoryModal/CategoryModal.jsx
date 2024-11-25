@@ -3,8 +3,8 @@ import style from './categoryModal.module.css';
 import { IoIosArrowForward } from "react-icons/io";
 
 const CategoryModal = ({ closeModal }) => {
-  const [categories, setCategories] = useState([]); 
-  const [selectedCategory, setSelectedCategory] = useState(null); 
+  const [categories, setCategories] = useState([]); // Ana kateqoriyalar
+  const [selectedCategory, setSelectedCategory] = useState(null); // Seçilmiş kateqoriya
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -15,6 +15,7 @@ const CategoryModal = ({ closeModal }) => {
         const result = await response.json();
         console.log('API Yanıtı:', result);
         if (result.isSuccessful) {
+          // ParentId'si null olan kateqoriyaları filtrə edin
           const filteredCategories = result.data.filter(
             (category) => category.parentId === null
           );
@@ -38,18 +39,20 @@ const CategoryModal = ({ closeModal }) => {
             {categories.map((category) => (
               <div
                 key={category.categoryId}
-                onMouseEnter={() => setSelectedCategory(category)} 
+                onMouseEnter={() => setSelectedCategory(category)} // Seçilmiş kateqoriyanı təyin edin
                 className={style.categoryItem}
               >
-                <span className={style.categoryIcon}>{}</span>
+                <span className={style.categoryIcon}>{/* İkona əlavə etmək üçün yer */}</span>
                 {category.categoryTitle}
               </div>
             ))}
           </div>
 
+          {/* Alt kateqoriyalar */}
           <div className={style.products}>
             {selectedCategory ? (
               <ul className={style.products_ul}>
+                {/* Alt kateqoriyaları göstər */}
                 {selectedCategory.childCategories && selectedCategory.childCategories.length > 0 ? (
                   selectedCategory.childCategories.map((child) => (
                     <li className={style.products_li} key={child.categoryId}>
