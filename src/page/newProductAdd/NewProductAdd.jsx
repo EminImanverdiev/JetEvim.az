@@ -24,7 +24,7 @@ const NewProductAdd = () => {
       } catch (error) {
         console.error("Hata oluştu:", error);
       } finally {
-        setLoadingCategories(false); // Yüklənmə tamamlanıb
+        setLoadingCategories(false); 
       }
     };
 
