@@ -29,6 +29,7 @@
   display: flex;
   gap: 20px;
   justify-content: space-between;
+  transition-duration: 1s;
 }
 
 .addBox_left_box_top_card_item {

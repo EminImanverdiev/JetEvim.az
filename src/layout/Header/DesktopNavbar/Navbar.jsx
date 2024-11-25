@@ -45,7 +45,7 @@ const Navbar = () => {
                 <div className="container">
                     <div className={style.navbar_container}>
                         <p className={style.navbarBrand} onClick={() => navigate("/")}>
-                            EasySaleApp
+                            JetEvimiz
                         </p>
                         <div className={style.offcanvasBody}>
                             <div className={style.categoryBox} onClick={openModal}>
