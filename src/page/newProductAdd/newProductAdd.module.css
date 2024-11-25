@@ -84,6 +84,58 @@
   padding: 10px;
 }
 
+.addBox_image_upload_container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.addBox_image_preview {
+  position: relative;
+  display: inline-block;
+}
+
+.addBox_image {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.addBox_image_remove {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.addBox_image_add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.addBox_image_input {
+  display: none;
+}
+
 @media screen and (max-width: 968px) {
   .addBox {
     flex-direction: column;

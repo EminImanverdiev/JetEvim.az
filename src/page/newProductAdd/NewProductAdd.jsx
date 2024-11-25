@@ -11,6 +11,7 @@ const NewProductAdd = () => {
   const [parameters, setParameters] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true); 
   const [loadingParameters, setLoadingParameters] = useState(false);
+  const [images, setImages] = useState([]);
 
   const cities = ['Bakı', 'Gəncə', 'Sumqayıt', 'Şəki', 'Lənkəran'];
 
@@ -56,6 +57,16 @@ const NewProductAdd = () => {
 
   const handleCityChange = (event) => {
     setSelectedCity(event.target.value);
+  };
+
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+    const newImages = files.map(file => URL.createObjectURL(file)); // Resim önizlemesi için URL oluşturma
+    setImages((prevImages) => [...prevImages, ...newImages]); // Yeni resimleri mevcut listeye ekleme
+  };
+
+  const removeImage = (index) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index)); // Seçilen resmi kaldırma
   };
 
   const renderParameterInput = (parameter) => {
@@ -136,7 +147,27 @@ const NewProductAdd = () => {
                     id="content"
                   ></textarea>
                 </div>
-
+                <div className={style.addBox_left_box_top_card}>
+                  <p>Şəkil əlavə et</p>
+                  <div className={style.addBox_image_upload_container}>
+                    {images.map((image, index) => (
+                      <div key={index} className={style.addBox_image_preview}>
+                        <img src={image} alt={`Preview ${index}`} className={style.addBox_image} />
+                        <button className={style.addBox_image_remove} onClick={() => removeImage(index)}>×</button>
+                      </div>
+                    ))}
+                    <label className={style.addBox_image_add}>
+                      +
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className={style.addBox_image_input}
+                      />
+                    </label>
+                  </div>
+                </div>
                 {loadingParameters ? (
                   <div className={style.addBox_left_box_top_card}>Parametrlər yüklənir...</div>
                 ) : (
