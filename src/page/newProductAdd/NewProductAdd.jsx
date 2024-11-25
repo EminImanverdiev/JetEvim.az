@@ -9,8 +9,8 @@ const NewProductAdd = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [parameters, setParameters] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true); // Yüklənmə vəziyyəti
-  const [loadingParameters, setLoadingParameters] = useState(false); // Parametrlərin yüklənmə vəziyyəti
+  const [loadingCategories, setLoadingCategories] = useState(true); 
+  const [loadingParameters, setLoadingParameters] = useState(false);
 
   const cities = ['Bakı', 'Gəncə', 'Sumqayıt', 'Şəki', 'Lənkəran'];
 
@@ -66,7 +66,6 @@ const NewProductAdd = () => {
         return (
           <select key={parameter.parameterId} className={style.addBox_left_box_top_card_item}>
             <option value="">--Seçin--</option>
-            {/* Burada select-in optionslarını statik olaraq yazdım, amma API-dən gələn data ilə doldura bilərsiniz */}
             <option value="option1">Seçim 1</option>
             <option value="option2">Seçim 2</option>
           </select>
@@ -93,7 +92,7 @@ const NewProductAdd = () => {
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                     className={style.addBox_left_box_top_card_item}
-                    disabled={loadingCategories} // Kategoriyalar yüklənənə qədər disable et
+                    disabled={loadingCategories} 
                   >
                     <option value="">--Kateqoriya seçin--</option>
                     {loadingCategories ? (
