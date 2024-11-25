@@ -8,14 +8,13 @@ const CategoryModal = ({ closeModal }) => {
   
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
+      try { 
         const response = await fetch(
           'http://restartbaku-001-site3.htempurl.com/api/Category/get-all-categories?LanguageCode=1'
         );
         const result = await response.json();
         console.log('API Yanıtı:', result);
         if (result.isSuccessful) {
-          // ParentId'si null olan kateqoriyaları filtrə edin
           const filteredCategories = result.data.filter(
             (category) => category.parentId === null
           );
@@ -34,25 +33,21 @@ const CategoryModal = ({ closeModal }) => {
       <div className={style.modalContent}>
         <button onClick={closeModal} className={style.modalContent_btn}>X</button>
         <div className={style.modalBody}>
-          {/* Ana kateqoriyalar */}
           <div className={style.categories}>
             {categories.map((category) => (
               <div
                 key={category.categoryId}
-                onMouseEnter={() => setSelectedCategory(category)} // Seçilmiş kateqoriyanı təyin edin
+                onMouseEnter={() => setSelectedCategory(category)}
                 className={style.categoryItem}
               >
-                <span className={style.categoryIcon}>{/* İkona əlavə etmək üçün yer */}</span>
+                <span className={style.categoryIcon}></span>
                 {category.categoryTitle}
               </div>
             ))}
           </div>
-
-          {/* Alt kateqoriyalar */}
           <div className={style.products}>
             {selectedCategory ? (
               <ul className={style.products_ul}>
-                {/* Alt kateqoriyaları göstər */}
                 {selectedCategory.childCategories && selectedCategory.childCategories.length > 0 ? (
                   selectedCategory.childCategories.map((child) => (
                     <li className={style.products_li} key={child.categoryId}>

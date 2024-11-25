@@ -47,7 +47,8 @@
 .modalBody {
   display: flex;
   padding-top: 15px;
-  height: 100%;
+  height: -moz-max-content;
+  height: max-content;
 }
 
 .categories {
@@ -128,4 +129,19 @@
 .categoryIcon {
   margin-right: 10px;
   font-size: 1.5rem;
+}
+
+@media screen and (max-width: 968px) {
+  .modalContent {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .categoryItem {
+    font-size: 14px;
+    min-width: 150px;
+  }
+  .products {
+    width: 50%;
+  }
 }/*# sourceMappingURL=categoryModal.module.css.map */
