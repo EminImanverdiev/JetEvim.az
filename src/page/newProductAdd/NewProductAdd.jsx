@@ -15,7 +15,6 @@ const NewProductAdd = () => {
 
   const cities = ['Bakı', 'Gəncə', 'Sumqayıt', 'Şəki', 'Lənkəran'];
 
-  // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
       setLoadingCategories(true);
@@ -26,18 +25,14 @@ const NewProductAdd = () => {
       } catch (error) {
         console.error("Hata oluştu:", error);
       } finally {
-<<<<<<< HEAD
         setLoadingCategories(false); 
-=======
         setLoadingCategories(false);
->>>>>>> bb577fb56dd246fa3bdc692ef2c3e6b943fe2b1f
       }
     };
 
     fetchCategories();
   }, []);
 
-  // Fetch parameters for selected category
   useEffect(() => {
     const fetchParameters = async () => {
       if (selectedCategory) {
@@ -76,23 +71,57 @@ const NewProductAdd = () => {
   };
 
   const renderParameterInput = (parameter) => {
+    const commonClass = style.addBox_left_box_top_card_item;
+  
     switch (parameter.parameterTypeTitle) {
       case 'string':
-        return <input key={parameter.parameterId} type="text" className={style.addBox_left_box_top_card_item} />;
-      case 'select':
         return (
-          <select key={parameter.parameterId} className={style.addBox_left_box_top_card_item}>
-            <option value="">--Seçin--</option>
-            <option value="option1">Seçim 1</option>
-            <option value="option2">Seçim 2</option>
+          <input
+            key={parameter.parameterId}
+            type="text"
+            className={commonClass}
+            placeholder={parameter.placeholder || "Məlumat daxil edin"}
+            defaultValue={parameter.defaultValue || ""}
+          />
+        );
+      case 'select':
+        const options = parameter.parameterMasks?.map((mask) => ({
+          value: mask.parameterMaskId,
+          label: mask.parameterMaskData,
+        })) || [];
+  
+        return (
+          <select
+            key={parameter.parameterId}
+            className={commonClass}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              {parameter.placeholder || "--Seçin--"}
+            </option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         );
       case 'int':
-        return <input key={parameter.parameterId} type="number" className={style.addBox_left_box_top_card_item} />;
+        return (
+          <input
+            key={parameter.parameterId}
+            type="number"
+            className={commonClass}
+            placeholder={parameter.placeholder || "Rəqəm daxil edin"}
+            defaultValue={parameter.defaultValue || ""}
+          />
+        );
       default:
-        return null;
+        return null; 
     }
   };
+  
+  
 
   return (
     <div className={style.addBox_main_container}>
@@ -132,7 +161,7 @@ const NewProductAdd = () => {
                   </select>
                 </div>
 
-                {/* City Dropdown */}
+                {/* City Dropdown
                 <div className={style.addBox_left_box_top_card}>
                   Şəhər
                   <select
@@ -145,17 +174,15 @@ const NewProductAdd = () => {
                       <option key={index} value={city}>{city}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
-                {/* Price */}
                 <div className={style.addBox_left_box_top_card}>
                   Qiymət, AZN
                   <div className={style.addBox_left_box_top_card_item}>
-                    <input required type="text" className={style.addBox_left_box_top_card_item_input} /> AZN
+                    <input required type="text" className={style.addBox_left_box_top_card_item_input} />
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className={style.addBox_left_box_top_card}>
                   Məzmun
                   <textarea
@@ -165,8 +192,20 @@ const NewProductAdd = () => {
                   ></textarea>
                 </div>
 
-                {/* Image Upload */}
-                <div className={style.addBox_left_box_top_card}>
+             
+
+                {loadingParameters ? (
+                  <div className={style.addBox_left_box_top_card}>Parametrlər yüklənir...</div>
+                ) : (
+                  parameters.length > 0 && parameters.map(parameter => (
+                    <div className={style.addBox_left_box_top_card} key={parameter.parameterId}>
+                      {parameter.parameterTitle}
+                      {renderParameterInput(parameter)}
+                    </div>
+                  ))
+                )}
+              </div>
+              <div className={style.addBox_left_box_top_card}>
                   <p>Şəkil əlavə et</p>
                   <div className={style.addBox_image_upload_container}>
                     {images.map((image, index) => (
@@ -187,20 +226,6 @@ const NewProductAdd = () => {
                     </label>
                   </div>
                 </div>
-
-                {/* Parameters */}
-                {loadingParameters ? (
-                  <div className={style.addBox_left_box_top_card}>Parametrlər yüklənir...</div>
-                ) : (
-                  parameters.length > 0 && parameters.map(parameter => (
-                    <div className={style.addBox_left_box_top_card} key={parameter.parameterId}>
-                      {parameter.parameterTitle}
-                      {renderParameterInput(parameter)}
-                    </div>
-                  ))
-                )}
-              </div>
-
               {/* Contact Info */}
               <div className={style.addBox_left_box_main}>
                 <p className={style.addBox_left_box_main_title}>Əlaqə məlumatları</p>
