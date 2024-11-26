@@ -9,29 +9,31 @@ const NewProductAdd = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [parameters, setParameters] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true); 
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingParameters, setLoadingParameters] = useState(false);
   const [images, setImages] = useState([]);
 
   const cities = ['Bakı', 'Gəncə', 'Sumqayıt', 'Şəki', 'Lənkəran'];
 
+  // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
       setLoadingCategories(true);
       try {
         const response = await fetch('http://restartbaku-001-site3.htempurl.com/api/Category/get-all-categories?LanguageCode=1');
         const data = await response.json();
-        setCategories(data.data);
+        setCategories(data.data || []);
       } catch (error) {
         console.error("Hata oluştu:", error);
       } finally {
-        setLoadingCategories(false); // Yüklənmə tamamlanıb
+        setLoadingCategories(false);
       }
     };
 
     fetchCategories();
   }, []);
 
+  // Fetch parameters for selected category
   useEffect(() => {
     const fetchParameters = async () => {
       if (selectedCategory) {
@@ -39,7 +41,7 @@ const NewProductAdd = () => {
         try {
           const response = await fetch(`http://restartbaku-001-site3.htempurl.com/api/Category/get-parameters?LanguageCode=1&CategoryId=${selectedCategory}&RequestFrontType=add`);
           const data = await response.json();
-          setParameters(data.data);
+          setParameters(data.data || []);
         } catch (error) {
           console.error("Hata oluştu:", error);
         } finally {
@@ -61,12 +63,12 @@ const NewProductAdd = () => {
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map(file => URL.createObjectURL(file)); // Resim önizlemesi için URL oluşturma
-    setImages((prevImages) => [...prevImages, ...newImages]); // Yeni resimleri mevcut listeye ekleme
+    const newImages = files.map(file => URL.createObjectURL(file));
+    setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
   const removeImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index)); // Seçilen resmi kaldırma
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const renderParameterInput = (parameter) => {
@@ -97,27 +99,36 @@ const NewProductAdd = () => {
           <div className={style.addBox}>
             <div className={style.addBox_left}>
               <div className={style.addBox_left_box_top}>
+                {/* Categories Dropdown */}
                 <div className={style.addBox_left_box_top_card}>
                   Kateqoriya
                   <select
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    className={style.addBox_left_box_top_card_item}
-                    disabled={loadingCategories} 
-                  >
+                      value={selectedCategory}
+                      onChange={handleCategoryChange}
+                      className={style.addBox_left_box_top_card_item}
+                      disabled={loadingCategories}
+                    >
                     <option value="">--Kateqoriya seçin--</option>
                     {loadingCategories ? (
                       <option disabled>Yüklənir...</option>
                     ) : (
                       categories.map((category) => (
-                        <option key={category.categoryId} value={category.categoryId}>
-                          {category.categoryTitle}
-                        </option>
+                        <React.Fragment key={category.categoryId}>
+                          <option value={category.categoryId} className={style.parentCategoryTitle} disabled>
+                            {category.categoryTitle}
+                          </option>
+                          {category.childCategories?.map((child) => (
+                            <option key={child.categoryId} value={child.categoryId}>
+                              -- {child.categoryTitle}
+                            </option>
+                          ))}
+                        </React.Fragment>
                       ))
                     )}
                   </select>
                 </div>
 
+                {/* City Dropdown */}
                 <div className={style.addBox_left_box_top_card}>
                   Şəhər
                   <select
@@ -132,6 +143,7 @@ const NewProductAdd = () => {
                   </select>
                 </div>
 
+                {/* Price */}
                 <div className={style.addBox_left_box_top_card}>
                   Qiymət, AZN
                   <div className={style.addBox_left_box_top_card_item}>
@@ -139,6 +151,7 @@ const NewProductAdd = () => {
                   </div>
                 </div>
 
+                {/* Content */}
                 <div className={style.addBox_left_box_top_card}>
                   Məzmun
                   <textarea
@@ -147,6 +160,8 @@ const NewProductAdd = () => {
                     id="content"
                   ></textarea>
                 </div>
+
+                {/* Image Upload */}
                 <div className={style.addBox_left_box_top_card}>
                   <p>Şəkil əlavə et</p>
                   <div className={style.addBox_image_upload_container}>
@@ -168,6 +183,8 @@ const NewProductAdd = () => {
                     </label>
                   </div>
                 </div>
+
+                {/* Parameters */}
                 {loadingParameters ? (
                   <div className={style.addBox_left_box_top_card}>Parametrlər yüklənir...</div>
                 ) : (
@@ -180,6 +197,7 @@ const NewProductAdd = () => {
                 )}
               </div>
 
+              {/* Contact Info */}
               <div className={style.addBox_left_box_main}>
                 <p className={style.addBox_left_box_main_title}>Əlaqə məlumatları</p>
                 <div className={style.addBox_left_box_main_card}>
@@ -192,29 +210,24 @@ const NewProductAdd = () => {
                 </div>
                 <div className={style.addBox_left_box_main_card}>
                   Mobil nömrə
-                  <input
-                    pattern="[050]{123}-[45]{67}"
-                    required
-                    type="tel"
-                    max={10}
-                    min={10}
-                    className={style.addBox_left_box_top_card_item}
-                  />
+                  <input type="tel" className={style.addBox_left_box_top_card_item} required />
                 </div>
               </div>
 
+              {/* Submit Button */}
               <div className={style.addBox_left_box_bottom}>
-                <p>Elan yerləşdirərək, siz Tap.az-ın İstifadəçi razılaşması ilə razı olduğunuzu təsdiq edirsiniz.</p>
+                <p>Elan yerləşdirərək, siz JetEvimiz-ın İstifadəçi razılaşması ilə razı olduğunuzu təsdiq edirsiniz.</p>
                 <button className={style.addBox_left_box_bottom_btn}>Elanı əlavə et</button>
               </div>
             </div>
 
+            {/* Rules */}
             <div className={style.addBox_right}>
-              <p className={style.addBox_right_title}>EasySaleApp-ın sadə qaydaları</p>
+              <p className={style.addBox_right_title}>JetEvimiz-ın sadə qaydaları</p>
               <p className={style.addBox_right_subTitle}>* Eyni elanı bir neçə dəfə təqdim etməyin.</p>
               <p className={style.addBox_right_subTitle}>* Təsvir və ya şəkillərdə telefon, email və ya sayt ünvanı göstərməyin.</p>
               <p className={style.addBox_right_subTitle}>* Ad yerində qiymət yazmayın - bunun üçün ayrıca yer var.</p>
-              <p className={style.addBox_right_subTitle}>* Qadağan olunmuş məhsulları satmayın.</p>
+              <p className={style.addBox_right_subTitle}>* Təqdim etməzdən əvvəl elanı yoxlayın.</p>
             </div>
           </div>
         </div>

@@ -134,7 +134,21 @@
   .addBox_image_input {
     display: none;
   }
+
+  .addBox_left_box_top_card_headCat{
+    font-weight: bold;
+    font-size: 18px;
+  }
   
+  .categoryBox{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .parentCategoryTitle{
+    font-weight: bold;
+    font-size: 16px;
+  }
 
 @media screen and (max-width:968px) {
     .addBox{
