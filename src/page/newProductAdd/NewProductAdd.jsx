@@ -73,18 +73,8 @@ const NewProductAdd = () => {
   const renderParameterInput = (parameter) => {
     const commonClass = style.addBox_left_box_top_card_item;
   
-    switch (parameter.parameterTypeTitle) {
-      case 'string':
-        return (
-          <input
-            key={parameter.parameterId}
-            type="text"
-            className={commonClass}
-            placeholder={parameter.placeholder || "Məlumat daxil edin"}
-            defaultValue={parameter.defaultValue || ""}
-          />
-        );
-      case 'select':
+    switch (parameter.parameterTypeId) {
+      case 1:   
         const options = parameter.parameterMasks?.map((mask) => ({
           value: mask.parameterMaskId,
           label: mask.parameterMaskData,
@@ -94,10 +84,11 @@ const NewProductAdd = () => {
           <select
             key={parameter.parameterId}
             className={commonClass}
+            placeholder={parameter.parameterKey || "--Seçin--"}
             defaultValue=""
           >
             <option value="" disabled>
-              {parameter.placeholder || "--Seçin--"}
+              {parameter.parameterKey || "--Seçin--"}
             </option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -106,18 +97,31 @@ const NewProductAdd = () => {
             ))}
           </select>
         );
-      case 'int':
+  
+      case 2: // Number input
         return (
           <input
             key={parameter.parameterId}
             type="number"
             className={commonClass}
-            placeholder={parameter.placeholder || "Rəqəm daxil edin"}
-            defaultValue={parameter.defaultValue || ""}
+            placeholder={parameter.parameterKey || "Rəqəm daxil edin"}
+            defaultValue={parameter.parameterValue || ""}
           />
         );
+  
+      case 3: // Text input
+        return (
+          <input
+            key={parameter.parameterId}
+            type="text"
+            className={commonClass}
+            placeholder={parameter.parameterKey || "Məlumat daxil edin"}
+            defaultValue={parameter.parameterValue || ""}
+          />
+        );
+  
       default:
-        return null; 
+        return null; // Digər hallarda heç bir element qaytarmırıq
     }
   };
   
